@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
-import './style.css'
 import router from './router'
 import App from './App.vue'
+// 引入初始化样式
+import '@/styles/common.scss'
 
 const app = createApp(App)
 app.use(router)

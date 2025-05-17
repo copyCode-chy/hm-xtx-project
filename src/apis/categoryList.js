@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function getTestData() {
+export function getCategoryList() {
   return request({
     url: 'home/category/head'
   })

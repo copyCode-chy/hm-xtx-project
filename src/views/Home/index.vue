@@ -18,4 +18,6 @@ import HomeHot from './components/HomeHot.vue'
 import HomeNew from './components/HomeNew.vue'
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {}
+</style>

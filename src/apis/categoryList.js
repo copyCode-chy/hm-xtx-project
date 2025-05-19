@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
-export function getCategoryList() {
+export function getSecondCategory(id) {
   return request({
-    url: 'home/category/head'
+    url: '/category',
+    params: {
+      id
+    }
   })
 }

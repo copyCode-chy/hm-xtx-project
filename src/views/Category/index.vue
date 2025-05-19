@@ -1,16 +1,115 @@
+<script setup>
+import { onMounted } from 'vue';
+import { getSecondCategory } from '@/apis/categoryList';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+// 获取路由参数
+const route = useRoute();
+const id = route.params.id;
+
+const secondCateggory = ref({});
+const getSecondCategoryList = async () => {
+  const res = await getSecondCategory(id);
+  secondCateggory.value = res.data.result;
+};
+
+onMounted(() => {
+  getSecondCategoryList();
+});
+</script>
+
 <template>
-  <div>
-    分类
+  <div class="top-category">
+    <div class="container m-top-20">
+      <!-- 面包屑 -->
+      <div class="bread-container">
+        <el-breadcrumb separator=">">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ secondCateggory.name }}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { useRoute } from 'vue-router';
 
-const route = useRoute()
+<style scoped lang="scss">
+.top-category {
+  h3 {
+    font-size: 28px;
+    color: #666;
+    font-weight: normal;
+    text-align: center;
+    line-height: 100px;
+  }
 
-console.log(route.params);
+  .sub-list {
+    margin-top: 20px;
+    background-color: #fff;
 
-</script>
+    ul {
+      display: flex;
+      padding: 0 32px;
+      flex-wrap: wrap;
 
-<style lang="scss" scoped></style>
+      li {
+        width: 168px;
+        height: 160px;
+
+
+        a {
+          text-align: center;
+          display: block;
+          font-size: 16px;
+
+          img {
+            width: 100px;
+            height: 100px;
+          }
+
+          p {
+            line-height: 40px;
+          }
+
+          &:hover {
+            color: $xtxColor;
+          }
+        }
+      }
+    }
+  }
+
+  .ref-goods {
+    background-color: #fff;
+    margin-top: 20px;
+    position: relative;
+
+    .head {
+      .xtx-more {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      .tag {
+        text-align: center;
+        color: #999;
+        font-size: 20px;
+        position: relative;
+        top: -20px;
+      }
+    }
+
+    .body {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 40px 30px;
+    }
+  }
+
+  .bread-container {
+    padding: 25px 0;
+  }
+}
+</style>

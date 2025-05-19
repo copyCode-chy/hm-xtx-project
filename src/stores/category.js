@@ -1,7 +1,7 @@
 // 此处存储分类数据
 import { defineStore } from "pinia";
 import { ref } from 'vue'
-import { getCategoryList } from "@/apis/categoryList";
+import { getCategoryList } from "@/apis/layout";
 
 export const useCategoryStore = defineStore("category", () => {
   // 导航列表数据管理

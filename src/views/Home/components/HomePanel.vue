@@ -2,12 +2,10 @@
 // props传递简单的数据，插槽传递复杂的数据
 defineProps({
   title: {
-    type: String,
-    default: '数据获取失败'
+    type: String
   },
   subTitle: {
-    type: String,
-    default: '数据获取失败'
+    type: String
   }
 })
 </script>

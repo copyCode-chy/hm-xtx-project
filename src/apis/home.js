@@ -6,7 +6,6 @@ export const getBannerList = () => {
     url: 'home/banner'
   })
 }
-
 // 发送获取新鲜好物数据请求
 export const getNewList = () => {
   return request({
@@ -17,5 +16,11 @@ export const getNewList = () => {
 export const getHotList = () => {
   return request({
     url: 'home/hot'
+  })
+}
+// 获取所有商品模块
+export const getGoodsList = () => {
+  return request({
+    url: 'home/goods'
   })
 }

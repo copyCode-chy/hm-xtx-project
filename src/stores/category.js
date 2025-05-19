@@ -1,3 +1,4 @@
+// 此处存储分类数据
 import { defineStore } from "pinia";
 import { ref } from 'vue'
 import { getCategoryList } from "@/apis/categoryList";

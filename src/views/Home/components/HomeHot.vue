@@ -1,6 +1,6 @@
 <template>
   <div>
-    111
+    我是人气推荐
   </div>
 </template>
 

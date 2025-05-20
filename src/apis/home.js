@@ -1,9 +1,13 @@
 import request from '@/utils/request'
 
 // 发送获取轮播图数据请求
-export const getBannerList = () => {
+export const getBannerList = (option = {}) => {
+  const { distributionSite = '1' } = option
   return request({
-    url: 'home/banner'
+    url: 'home/banner',
+    params: {
+      distributionSite
+    }
   })
 }
 // 发送获取新鲜好物数据请求

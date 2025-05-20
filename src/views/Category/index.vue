@@ -1,6 +1,8 @@
 <script setup>
+// 引入
 import { onMounted } from 'vue';
 import { getSecondCategory } from '@/apis/categoryList';
+import { getBannerList } from '@/apis/home';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -8,14 +10,25 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const id = route.params.id;
 
-const secondCateggory = ref({});
+// 存储
+const secondCategory = ref({});
+const bannerList = ref([]);
+
+// 请求方法
 const getSecondCategoryList = async () => {
   const res = await getSecondCategory(id);
-  secondCateggory.value = res.data.result;
+  secondCategory.value = res.data.result;
+};
+const getBanner = async () => {
+  const res = await getBannerList();
+  bannerList.value = res.data.result;
+  console.log(bannerList.value);
 };
 
+// 发送请求
 onMounted(() => {
   getSecondCategoryList();
+  getBanner();
 });
 </script>
 
@@ -26,8 +39,17 @@ onMounted(() => {
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ secondCateggory.name }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ secondCategory.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+
+      <!-- 轮播图 -->
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img :src="item.imgUrl" alt="">
+          </el-carousel-item>
+        </el-carousel>
       </div>
     </div>
   </div>
@@ -36,6 +58,18 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .top-category {
+  .home-banner {
+    width: 1240px;
+    height: 500px;
+    margin: 0 auto;
+    z-index: 98;
+
+    img {
+      width: 100%;
+      height: 500px;
+    }
+  }
+
   h3 {
     font-size: 28px;
     color: #666;

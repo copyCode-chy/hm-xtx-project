@@ -5,6 +5,7 @@ import { getSecondCategory } from '@/apis/categoryList';
 import { getBannerList } from '@/apis/home';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+import goodsItem from '@/views/Home/components/goodsItem.vue';
 
 // 获取路由参数
 const route = useRoute();
@@ -20,7 +21,9 @@ const getSecondCategoryList = async () => {
   secondCategory.value = res.data.result;
 };
 const getBanner = async () => {
-  const res = await getBannerList();
+  const res = await getBannerList({
+    distributionSite: '2'
+  });
   bannerList.value = res.data.result;
   console.log(bannerList.value);
 };
@@ -50,6 +53,27 @@ onMounted(() => {
             <img :src="item.imgUrl" alt="">
           </el-carousel-item>
         </el-carousel>
+      </div>
+
+      <!-- 分类数据  -->
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in secondCategory.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in secondCategory.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <goodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+        </div>
       </div>
     </div>
   </div>

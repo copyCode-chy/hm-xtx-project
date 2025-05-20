@@ -6,17 +6,17 @@ import { getBannerList } from '@/apis/home';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import goodsItem from '@/views/Home/components/goodsItem.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 // 获取路由参数
 const route = useRoute();
-const id = route.params.id;
 
 // 存储
 const secondCategory = ref({});
 const bannerList = ref([]);
 
 // 请求方法
-const getSecondCategoryList = async () => {
+const getSecondCategoryList = async (id = route.params.id) => {
   const res = await getSecondCategory(id);
   secondCategory.value = res.data.result;
 };
@@ -33,6 +33,10 @@ onMounted(() => {
   getSecondCategoryList();
   getBanner();
 });
+// 路由参数变化前调用解决路由缓存问题
+onBeforeRouteUpdate(to => {
+  getSecondCategoryList(to.params.id);
+})
 </script>
 
 <template>

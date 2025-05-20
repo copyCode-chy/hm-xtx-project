@@ -20,7 +20,14 @@ onMounted(() => {
   <LayoutFixed />
   <LayoutNav />
   <LayoutHeader />
+
+  <!-- 注意，二级路由出口 -->
+  <!-- 解决路由缓存问题 -->
+  <!-- 方法一: 添加:key -->
+  <!-- <RouterView :key="$route.fullPath" /> -->
+  <!-- 方法二：使用onBeforeRouteUpdate  -->
   <RouterView />
+
   <LayoutFooter />
 </template>
 

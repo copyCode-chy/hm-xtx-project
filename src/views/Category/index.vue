@@ -1,42 +1,10 @@
 <script setup>
-// 引入
-import { onMounted } from 'vue';
-import { getSecondCategory } from '@/apis/categoryList';
-import { getBannerList } from '@/apis/home';
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
 import goodsItem from '@/views/Home/components/goodsItem.vue';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { useCategory } from './composables/useCategory';
+import { useBanner } from './composables/useBanner';
 
-// 获取路由参数
-const route = useRoute();
-
-// 存储
-const secondCategory = ref({});
-const bannerList = ref([]);
-
-// 请求方法
-const getSecondCategoryList = async (id = route.params.id) => {
-  const res = await getSecondCategory(id);
-  secondCategory.value = res.data.result;
-};
-const getBanner = async () => {
-  const res = await getBannerList({
-    distributionSite: '2'
-  });
-  bannerList.value = res.data.result;
-  console.log(bannerList.value);
-};
-
-// 发送请求
-onMounted(() => {
-  getSecondCategoryList();
-  getBanner();
-});
-// 路由参数变化前调用解决路由缓存问题
-onBeforeRouteUpdate(to => {
-  getSecondCategoryList(to.params.id);
-})
+const { secondCategory } = useCategory();
+const { bannerList } = useBanner();
 </script>
 
 <template>
@@ -64,7 +32,7 @@ onBeforeRouteUpdate(to => {
         <h3>全部分类</h3>
         <ul>
           <li v-for="i in secondCategory.children" :key="i.id">
-            <RouterLink to="/">
+            <RouterLink :to="`/category/sub/${i.id}`">
               <img :src="i.picture" />
               <p>{{ i.name }}</p>
             </RouterLink>
@@ -112,6 +80,7 @@ onBeforeRouteUpdate(to => {
 
     ul {
       display: flex;
+      justify-content: space-between;
       padding: 0 32px;
       flex-wrap: wrap;
 

@@ -1,6 +1,19 @@
 <script setup>
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { getCategoryFilterAPI } from '@/apis/categoryList';
 
+const categoryList = ref([]);
+const route = useRoute();
 
+const getCategoryFilter = async (id = route.params.id) => {
+  const res = await getCategoryFilterAPI(id)
+  categoryList.value = res.data.result
+  console.log(categoryList.value);
+}
+onMounted(() => {
+  getCategoryFilter()
+})
 </script>
 
 <template>
@@ -9,9 +22,9 @@
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">居家
+        <el-breadcrumb-item :to="{ path: `/category/${categoryList.parentId}` }">{{ categoryList.parentName }}
         </el-breadcrumb-item>
-        <el-breadcrumb-item>居家生活用品</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryList.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
@@ -21,7 +34,7 @@
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
       <div class="body">
-         <!-- 商品列表-->
+        <!-- 商品列表-->
       </div>
     </div>
   </div>

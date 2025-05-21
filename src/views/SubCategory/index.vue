@@ -2,17 +2,37 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { getCategoryFilterAPI } from '@/apis/categoryList';
+import { getSubCategoryAPI } from '@/apis/categoryList';
+import goodsItem from '@/views/Home/components/goodsItem.vue';
 
+// 二级分类列表数据
 const categoryList = ref([]);
+// 导航栏数据
+const subCategoryList = ref([]);
 const route = useRoute();
 
+// 请求方法
 const getCategoryFilter = async (id = route.params.id) => {
   const res = await getCategoryFilterAPI(id)
   categoryList.value = res.data.result
+  console.log('1111');
   console.log(categoryList.value);
 }
+const getSubCategoryList = async () => {
+  const res = await getSubCategoryAPI({
+    categoryId: route.params.id,
+    page: 1,
+    pageSize: 10,
+    sortField: 'publishTime'
+  })
+  subCategoryList.value = res.data.result.items
+  console.log(subCategoryList.value);
+}
+
+// 发送请求
 onMounted(() => {
   getCategoryFilter()
+  getSubCategoryList()
 })
 </script>
 
@@ -35,6 +55,7 @@ onMounted(() => {
       </el-tabs>
       <div class="body">
         <!-- 商品列表-->
+        <goods-item v-for="item in subCategoryList" :key="item.id" :goods="item"></goods-item>
       </div>
     </div>
   </div>

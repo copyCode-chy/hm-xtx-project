@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 二级分类列表请求
+// 获取一级分类列表请求
 export function getSecondCategory(id) {
   return request({
     url: '/category',
@@ -21,5 +21,23 @@ export const getCategoryFilterAPI = (id) => {
     params: {
       id
     }
+  })
+}
+
+/**
+ * @description: 获取导航数据
+ * @data { 
+     categoryId: 1005000 ,
+     page: 1,
+     pageSize: 20,
+     sortField: 'publishTime' | 'orderNum' | 'evaluateNum'
+   } 
+ * @return {*}
+ */
+export const getSubCategoryAPI = (data) => {
+  return request({
+    url: '/category/goods/temporary',
+    method: 'POST',
+    data
   })
 }

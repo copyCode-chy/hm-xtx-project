@@ -10,28 +10,51 @@ const categoryList = ref([]);
 // 导航栏数据
 const subCategoryList = ref([]);
 const route = useRoute();
+const data = ref({
+  categoryId: route.params.id,
+  page: 1,
+  pageSize: 10,
+  sortField: 'publishTime'
+})
+// 是否禁用无限滚动
+const disabled = ref(false)
 
 // 请求方法
 const getCategoryFilter = async (id = route.params.id) => {
   const res = await getCategoryFilterAPI(id)
   categoryList.value = res.data.result
-  console.log('1111');
-  console.log(categoryList.value);
 }
 const getSubCategoryList = async () => {
-  const res = await getSubCategoryAPI({
-    categoryId: route.params.id,
-    page: 1,
-    pageSize: 10,
-    sortField: 'publishTime'
-  })
+  const res = await getSubCategoryAPI(data.value)
   subCategoryList.value = res.data.result.items
   console.log(subCategoryList.value);
+}
+// 事件
+const switchTab = () => {
+  data.value.page = 1
+  console.log('切换tab');
+  getSubCategoryList()
+}
+
+// 轮动到底部时自动执行
+const load = async () => {
+  // 页数加1
+  data.value.page++
+  // 再次发送请求
+  const res = await getSubCategoryAPI(data.value)
+  // 新老数据拼接
+  subCategoryList.value = [...subCategoryList.value, ...res.data.result.items]
+  // 如果没有数据了，禁用无限滚动
+  if (res.data.result.items === 0) {
+    disabled.value = true
+  }
 }
 
 // 发送请求
 onMounted(() => {
+  // 获取二级分类列表数据
   getCategoryFilter()
+  // 获取导航数据
   getSubCategoryList()
 })
 </script>
@@ -48,12 +71,12 @@ onMounted(() => {
       </el-breadcrumb>
     </div>
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="data.sortField" @tab-change="switchTab">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="load" infinite-scroll-delay=200 :infinite-scroll-disabled="disabled">
         <!-- 商品列表-->
         <goods-item v-for="item in subCategoryList" :key="item.id" :goods="item"></goods-item>
       </div>
@@ -61,8 +84,6 @@ onMounted(() => {
   </div>
 
 </template>
-
-
 
 <style lang="scss" scoped>
 .bread-container {

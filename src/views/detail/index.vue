@@ -3,15 +3,22 @@
 import { getDetail } from "@/apis/detail";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import detailHot from "./components/detailHot.vue";
 
 const goodsData = ref({});
 const route = useRoute();
+const dataType = ref([1, 2]);
 
-onMounted(async () => {
+// 获取商品详情数据
+const getGoodsData = async () => {
   const res = await getDetail(route.params.id);
   goodsData.value = res.data.result;
   console.log(goodsData.value);
-});
+}
+
+onMounted(() => {
+  getGoodsData();
+})
 </script>
 
 <template>
@@ -118,7 +125,12 @@ onMounted(async () => {
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+              <detailHot :dataType=dataType[0]>
+                24小时热榜
+              </detailHot>
+              <detailHot :dataType=dataType[1]>
+                周日榜
+              </detailHot>
             </div>
           </div>
         </div>

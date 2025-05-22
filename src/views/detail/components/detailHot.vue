@@ -6,6 +6,7 @@ import { ref, onMounted } from 'vue'
 const route = useRoute()
 const hotGoods = ref([]);
 
+// 获取父组件传递过来的数据，注意在setup里需要prop.
 const prop = defineProps({
   dataType: Number
 })

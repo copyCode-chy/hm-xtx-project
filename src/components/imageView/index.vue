@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
+import { useMouseInElement } from "@vueuse/core";
 // 图片列表
 const imageList = [
   "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
@@ -8,21 +9,56 @@ const imageList = [
   "https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg",
   "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
 ]
+// 图片下标
 const activeImg = ref(0)
+// 获取相应图片下标
 const getIndex = (i) => {
   activeImg.value = i
 }
 
+// 存储滑块位置
+const left = ref(0)
+const top = ref(0)
+// 获取大图的dom元素
+const target = ref(null)
+
+// 获取鼠标位置
+const { elementX, elementY, isOutside } = useMouseInElement(target)
+
+// 监听鼠标位置变化
+watch([elementX, elementY], () => {
+  // 有效范围内控制滑块距离
+  // // 横向
+  // if (elementX.value > 100 && elementX.value < 300) {
+  //   left.value = elementX.value - 100
+  // }
+  // // 纵向
+  // if (elementY.value > 100 && elementY.value < 300) {
+  //   top.value = elementY.value - 100
+  // }
+
+  // // 边界处理
+  // // 纵
+  // if (elementY.value > 300) { top.value = 200 }
+  // if (elementY.value < 100) { top.value = 0 }
+  // // 横
+  // if (elementX.value > 300) { left.value = 200 }
+  // if (elementX.value < 100) { left.value = 0 }
+  // 始终让滑块值保持在 0 - 200 区间（滑块尺寸是 200x200）
+  left.value = Math.max(0, Math.min(elementX.value - 100, 200))
+  top.value = Math.max(0, Math.min(elementY.value - 100, 200))
+})
 </script>
 
 
 <template>
+  {{ left }} {{ top }}
   <div class="goods-image">
     <!-- 左侧大图-->
     <div class="middle" ref="target">
       <img :src="imageList[activeImg]" alt="" />
       <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `0px`, top: `0px` }"></div>
+      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }"></div>
     </div>
     <!-- 小图列表 -->
     <ul class="small">

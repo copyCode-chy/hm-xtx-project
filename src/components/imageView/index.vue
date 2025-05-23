@@ -19,6 +19,13 @@ const getIndex = (i) => {
 // 存储滑块位置
 const left = ref(0)
 const top = ref(0)
+// 大图的宽高
+const bigWidth = 800
+const bigHeight = 800
+// 大图位置
+const bigLeft = ref(0)
+const bigTop = ref(0)
+
 // 获取大图的dom元素
 const target = ref(null)
 
@@ -27,6 +34,7 @@ const { elementX, elementY, isOutside } = useMouseInElement(target)
 
 // 监听鼠标位置变化
 watch([elementX, elementY], () => {
+  if (isOutside.value) { return 0 }
   // 有效范围内控制滑块距离
   // // 横向
   // if (elementX.value > 100 && elementX.value < 300) {
@@ -47,6 +55,9 @@ watch([elementX, elementY], () => {
   // 始终让滑块值保持在 0 - 200 区间（滑块尺寸是 200x200）
   left.value = Math.max(0, Math.min(elementX.value - 100, 200))
   top.value = Math.max(0, Math.min(elementY.value - 100, 200))
+  // 大图位置
+  bigLeft.value = -left.value * 2
+  bigTop.value = -top.value * 2
 })
 </script>
 
@@ -69,11 +80,11 @@ watch([elementX, elementY], () => {
     <!-- 放大镜大图 -->
     <div class="large" :style="[
       {
-        backgroundImage: `url(${imageList[0]})`,
-        backgroundPositionX: `0px`,
-        backgroundPositionY: `0px`,
+        backgroundImage: `url(${imageList[activeImg]})`,
+        backgroundPositionX: `${bigLeft}px`,
+        backgroundPositionY: `${bigTop}px`,
       },
-    ]" v-show="false"></div>
+    ]" v-show="!isOutside"></div>
   </div>
 </template>
 

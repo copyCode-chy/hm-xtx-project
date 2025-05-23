@@ -1,14 +1,14 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useMouseInElement } from "@vueuse/core";
-// 图片列表
-const imageList = [
-  "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
-  "https://yanxuan-item.nosdn.127.net/e801b9572f0b0c02a52952b01adab967.jpg",
-  "https://yanxuan-item.nosdn.127.net/b52c447ad472d51adbdde1a83f550ac2.jpg",
-  "https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg",
-  "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
-]
+// 接收商品图片数据
+defineProps({
+  imageList: {
+    type: Array,
+    default: () => []
+  }
+})
+
 // 图片下标
 const activeImg = ref(0)
 // 获取相应图片下标
@@ -19,9 +19,7 @@ const getIndex = (i) => {
 // 存储滑块位置
 const left = ref(0)
 const top = ref(0)
-// 大图的宽高
-const bigWidth = 800
-const bigHeight = 800
+
 // 大图位置
 const bigLeft = ref(0)
 const bigTop = ref(0)

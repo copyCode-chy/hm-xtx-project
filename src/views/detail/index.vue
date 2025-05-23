@@ -14,6 +14,7 @@ const dataType = ref([1, 2]);
 const getGoodsData = async () => {
   const res = await getDetail(route.params.id);
   goodsData.value = res.data.result;
+  console.log('商品详情');
   console.log(goodsData.value);
 }
 
@@ -43,7 +44,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <imageView></imageView>
+              <imageView :image-list="goodsData.mainPictures"></imageView>
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>

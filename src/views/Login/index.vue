@@ -8,6 +8,8 @@ const from = ref({
   password: null,
   agree: true
 })
+// 获取表单组件的组件实例
+const formEl = ref(null)
 
 // 此为自定义表单校验规则
 const validate = (rule, value, callback) => {
@@ -33,6 +35,17 @@ const rules = ref({
     { validator: validate, trigger: 'change' }
   ]
 })
+
+// 点击登录按钮后对整个表单进行校验
+const submitForm = () => {
+  // valid:所有表单都通过校验才为true
+  formEl.value.validate((valid) => {
+    // 以vaild作为判断条件
+    if (valid) {
+      console.log(valid);
+    }
+  })
+}
 
 </script>
 
@@ -60,7 +73,7 @@ const rules = ref({
           <div class="form">
 
             <!-- 表单校验 -->
-            <el-form label-position="right" label-width="60px" status-icon :model="from" :rules="rules">
+            <el-form label-position="right" label-width="60px" status-icon :model="from" :rules="rules" ref="formEl">
               <el-form-item label="账户" prop="userName">
                 <el-input v-model="from.userName" />
               </el-form-item>
@@ -72,7 +85,7 @@ const rules = ref({
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="submitForm()">点击登录</el-button>
             </el-form>
           </div>
         </div>

@@ -52,15 +52,17 @@ const submitForm = () => {
     // 以vaild作为判断条件,所有条件都满足即登录成功
     if (valid) {
       // 调用pinia里的获取用户信息的方法,通过发送请求获取
-      await userStore.getUserInfo({ account, password })
+      const res = await userStore.getUserInfo({ account, password })
 
-      ElMessage({
-        message: '登录成功',
-        type: 'success'
-      })
-      // 跳转首页
-      router.replace('/')
-      // }
+      // 判断登录是否成功
+      if (res.status === 200) {
+        ElMessage({
+          message: '登录成功',
+          type: 'success'
+        })
+        // 跳转首页
+        router.replace('/')
+      }
     }
   })
 }

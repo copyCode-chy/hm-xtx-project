@@ -1,15 +1,19 @@
 <script setup>
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
+import { loginApi } from '@/apis/user'
+import { useRouter } from 'vue-router'
 
 // 创建表单对象
 const from = ref({
   //账号密码 
-  userName: null,
+  account: null,
   password: null,
   agree: true
 })
 // 获取表单组件的组件实例
 const formEl = ref(null)
+const router = useRouter()
 
 // 此为自定义表单校验规则
 const validate = (rule, value, callback) => {
@@ -22,13 +26,13 @@ const validate = (rule, value, callback) => {
 
 // 创建表单验证规则
 const rules = ref({
-  userName: [
+  account: [
     { required: true, message: '账号不能为空', trigger: 'blur' },
-    { min: 3, max: 8, message: '账号应在3-8位之间', trigger: 'blur' }
+    { min: 3, max: 14, message: '账号应在3-8位之间', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '密码不能为空', trigger: 'blur' },
-    { min: 2, max: 6, message: '密码应在2-6位之间', trigger: 'blur' }
+    { min: 2, max: 16, message: '密码应在2-6位之间', trigger: 'blur' }
   ],
   agree: [
     // 将自定义的表单校验规则给到validator属性
@@ -38,11 +42,23 @@ const rules = ref({
 
 // 点击登录按钮后对整个表单进行校验
 const submitForm = () => {
+  const { account, password } = from.value
   // valid:所有表单都通过校验才为true
-  formEl.value.validate((valid) => {
+  formEl.value.validate(async (valid) => {
     // 以vaild作为判断条件
     if (valid) {
-      console.log(valid);
+      const res = await loginApi({ account, password })
+      console.log(res);
+
+      // 判断是否登录成功
+      if (res.status === 200) {
+        ElMessage({
+          message: '登录成功',
+          type: 'success'
+        })
+        // 跳转首页
+        router.push('/')
+      }
     }
   })
 }
@@ -74,8 +90,8 @@ const submitForm = () => {
 
             <!-- 表单校验 -->
             <el-form label-position="right" label-width="60px" status-icon :model="from" :rules="rules" ref="formEl">
-              <el-form-item label="账户" prop="userName">
-                <el-input v-model="from.userName" />
+              <el-form-item label="账户" prop="account">
+                <el-input v-model="from.account" />
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input v-model="from.password" />

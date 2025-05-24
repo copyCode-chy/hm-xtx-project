@@ -12,9 +12,14 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = res.data.result
     return res
   }
+  // 清除用户信息
+  const clearUserInfo = () => {
+    userInfo.value = {}
+  }
   // 这里的 persist 是 pinia-plugin-persistedstate 插件的配置项
   return {
     userInfo,
     getUserInfo,
+    clearUserInfo
   }
 }, { persist: true })

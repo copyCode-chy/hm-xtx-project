@@ -1,7 +1,7 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
-import { loginApi } from '@/apis/user'
+import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
 // 创建表单对象
@@ -13,6 +13,9 @@ const from = ref({
 })
 // 获取表单组件的组件实例
 const formEl = ref(null)
+// 获取用户登录的store
+const userStore = useUserStore()
+
 const router = useRouter()
 
 // 此为自定义表单校验规则
@@ -40,25 +43,24 @@ const rules = ref({
   ]
 })
 
+
 // 点击登录按钮后对整个表单进行校验
 const submitForm = () => {
-  const { account, password } = from.value
   // valid:所有表单都通过校验才为true
   formEl.value.validate(async (valid) => {
-    // 以vaild作为判断条件
+    const { account, password } = from.value
+    // 以vaild作为判断条件,所有条件都满足即登录成功
     if (valid) {
-      const res = await loginApi({ account, password })
-      console.log(res);
+      // 调用pinia里的获取用户信息的方法,通过发送请求获取
+      await userStore.getUserInfo({ account, password })
 
-      // 判断是否登录成功
-      if (res.status === 200) {
-        ElMessage({
-          message: '登录成功',
-          type: 'success'
-        })
-        // 跳转首页
-        router.push('/')
-      }
+      ElMessage({
+        message: '登录成功',
+        type: 'success'
+      })
+      // 跳转首页
+      router.replace('/')
+      // }
     }
   })
 }

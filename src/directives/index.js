@@ -1,6 +1,5 @@
 // 引入vueUse的useIntersectionObserver检测目标元素的可见性
 import { useIntersectionObserver } from '@vueuse/core'
-import { install } from 'element-plus'
 
 // 定义懒加载插件
 // 自定义v-img-lasy指令

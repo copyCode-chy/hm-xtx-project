@@ -6,6 +6,7 @@ import { createPinia } from 'pinia'
 import '@/styles/common.scss'
 // 引入自定义图片懒加载插件
 import { lazyPlugin } from './directives'
+import { componentPlugin } from './components'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -14,6 +15,7 @@ app
   .use(router)
   .use(pinia)
   .use(lazyPlugin)
+  .use(componentPlugin)
 
 app.mount('#app')
 

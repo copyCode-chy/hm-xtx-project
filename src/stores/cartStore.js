@@ -1,7 +1,7 @@
 // 购物车模块store
 
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const useCartStore = defineStore("cart", () => {
   // 1.store
@@ -22,8 +22,22 @@ export const useCartStore = defineStore("cart", () => {
     }
   }
 
+  // 删除指定购物车商品
+  const removeCartItem = (skuId) => {
+    const index = cartList.value.findIndex(item => item.skuId === skuId)
+    cartList.value.splice(index, 1)
+  }
+
+  // 计算商品总数和价格
+  // 总数
+  const totalCount = computed(() => cartList.value.reduce((total, item) => total + item.count, 0))
+  // 总价
+  const totalPrice = computed(() => cartList.value.reduce((total, item) => total + item.count * item.price, 0))
   return {
     cartList,
-    addCart
+    addCart,
+    removeCartItem,
+    totalCount,
+    totalPrice
   }
 }, { persist: true })

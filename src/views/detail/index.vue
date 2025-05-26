@@ -43,7 +43,7 @@ const addCart = () => {
       picture: goodsData.value.mainPictures[0],
       price: goodsData.value.price,
       count: count.value,
-      skuId: skuObj.skuid,
+      skuId: skuObj.skuId,
       attrsText: skuObj.specsText,
       selected: true
     })

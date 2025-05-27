@@ -29,3 +29,12 @@ export const removeCartItemApi = ([skuId]) => {
     }
   })
 }
+
+// 合并购物车接口
+export const mergeCartApi = (data) => {
+  return request({
+    url: '/member/cart/merge',
+    method: 'POST',
+    data
+  })
+}

@@ -54,7 +54,7 @@ instance.interceptors.response.use(function (response) {
     // 清除本地用户数据
     userStore.clearUserInfo()
     // 跳转到登录页
-    router.replace('/login')
+    // router.replace('/login')
   }
   return Promise.reject(error);
 });

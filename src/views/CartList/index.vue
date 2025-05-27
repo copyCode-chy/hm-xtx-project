@@ -2,6 +2,11 @@
 import { useCartStore } from '@/stores/cartStore';
 
 const cartStore = useCartStore();
+
+const singleCheck = (skuId, selected) => {
+  // 调用pinia里的方法单选
+  cartStore.singleChecked(skuId, selected);
+};
 </script>
 
 <template>
@@ -25,7 +30,7 @@ const cartStore = useCartStore();
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox />
+                <el-checkbox v-model="i.selected" @change="(selected) => singleCheck(i.skuId, selected)" />
               </td>
               <td>
                 <div class="goods">
@@ -41,7 +46,7 @@ const cartStore = useCartStore();
                 <p>&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
-                <el-input-number v-model="i.count" min="1" />
+                <el-input-number v-model="i.count" :min="1" />
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>

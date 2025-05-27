@@ -38,17 +38,30 @@ export const useCartStore = defineStore("cart", () => {
     }
   }
 
+  // 全选方法
+  const allCheckedChange = (selected) => {
+    cartList.value.forEach(item => {
+      item.selected = selected
+    })
+  }
+
+  //全选框
+  const allChecked = computed(() => cartList.value.every(item => item.selected === true))
+
   // 计算商品总数和价格
   // 总数
   const totalCount = computed(() => cartList.value.reduce((total, item) => total + item.count, 0))
   // 总价
   const totalPrice = computed(() => cartList.value.reduce((total, item) => total + item.count * item.price, 0))
+
   return {
     cartList,
     addCart,
     removeCartItem,
     totalCount,
     totalPrice,
-    singleChecked
+    singleChecked,
+    allChecked,
+    allCheckedChange
   }
 }, { persist: true })

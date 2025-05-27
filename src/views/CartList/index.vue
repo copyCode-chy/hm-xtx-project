@@ -3,10 +3,16 @@ import { useCartStore } from '@/stores/cartStore';
 
 const cartStore = useCartStore();
 
+// 调用单选方法
 const singleCheck = (skuId, selected) => {
   // 调用pinia里的方法单选
   cartStore.singleChecked(skuId, selected);
 };
+// 调用多选方法
+const allCheck = (selected) => {
+  // 调用pinia里的方法全选
+  cartStore.allCheckedChange(selected)
+}
 </script>
 
 <template>
@@ -17,7 +23,7 @@ const singleCheck = (skuId, selected) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox />
+                <el-checkbox :modelValue="cartStore.allChecked" @change="allCheck" />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>

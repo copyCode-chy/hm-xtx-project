@@ -1,26 +1,44 @@
 // 购物车模块store
-
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { useUserStore } from "./user";
+import { addCartApi, getCartListApi } from "@/apis/cart";
 
 export const useCartStore = defineStore("cart", () => {
+  // 获取token
+  const userStore = useUserStore()
   // 1.store
   const cartList = ref([])
   // 2.action
-  const addCart = (goods) => {
+  const addCart = async (goods) => {
+    const { skuId, count } = goods
     // 添加购物车操作
-    // 已添加过 - count + 1
-    // 没添加过 - push
-
-    // 判断是否添加过
-    const item = cartList.value.find((item) => goods.skuId === item.skuId)
-    if (item) {
-      // 已添加过
-      item.count += 1
+    // 进行加入购物车操作前，判断token是否存在
+    if (userStore.userInfo.token) {
+      // 发送加入购物车请求
+      await addCartApi({ skuId, count })
+      // 获取购物车列表
+      const res = await getCartListApi()
+      cartList.value = res.data.result
+      setTimeout(() => {
+        console.log(res);
+      }, 3000)
     } else {
-      cartList.value.push(goods)
+      // 本地购物车逻辑
+      // 判断是否添加过
+      // 已添加过 - count + 1
+      // 没添加过 - push
+      const item = cartList.value.find((item) => goods.skuId === item.skuId)
+      if (item) {
+        // 已添加过
+        item.count += 1
+      } else {
+        cartList.value.push(goods)
+      }
     }
   }
+
+
 
   // 删除指定购物车商品
   const removeCartItem = (skuId) => {

@@ -49,6 +49,11 @@ export const useCartStore = defineStore("cart", () => {
     }
   }
 
+  // 清除购物车
+  const clearCart = () => {
+    cartList.value = []
+  }
+
   // 获取最新的购物车列表
   const getCartList = async () => {
     const res = await getCartListApi()
@@ -93,6 +98,8 @@ export const useCartStore = defineStore("cart", () => {
     allChecked,
     allCheckedChange,
     selTotal,
-    selPrice
+    selPrice,
+    clearCart,
+    getCartList
   }
 }, { persist: true })

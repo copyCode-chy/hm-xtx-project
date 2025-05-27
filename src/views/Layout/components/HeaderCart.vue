@@ -7,6 +7,9 @@ const delCart = (skuId) => {
   // 调用pinia里的方法删除指定元素
   cartStore.removeCartItem(skuId)
 }
+
+// 获取最新的购物车数据
+cartStore.getCartList()
 </script>
 
 <template>

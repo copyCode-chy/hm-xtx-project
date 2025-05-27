@@ -2,10 +2,13 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { loginApi } from '@/apis/user'
+import { useCartStore } from '@/stores/cartStore'
 
 export const useUserStore = defineStore('user', () => {
   // 用户信息
   const userInfo = ref({})
+  // 获取购物车store
+  const { clearCart } = useCartStore()
   // 获取登录用户信息
   const getUserInfo = async ({ account, password }) => {
     const res = await loginApi({ account, password })
@@ -15,6 +18,8 @@ export const useUserStore = defineStore('user', () => {
   // 清除用户信息
   const clearUserInfo = () => {
     userInfo.value = {}
+    // 清除购物车
+    clearCart()
   }
   // 这里的 persist 是 pinia-plugin-persistedstate 插件的配置项
   return {

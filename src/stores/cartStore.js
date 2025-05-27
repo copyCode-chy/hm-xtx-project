@@ -1,8 +1,8 @@
 // 购物车模块store
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import { useUserStore } from "./user";
-import { addCartApi, getCartListApi } from "@/apis/cart";
+import { useUserStore } from "./userStore";
+import { addCartApi, getCartListApi, removeCartItemApi } from "@/apis/cart";
 
 export const useCartStore = defineStore("cart", () => {
   // 获取token
@@ -13,16 +13,12 @@ export const useCartStore = defineStore("cart", () => {
   const addCart = async (goods) => {
     const { skuId, count } = goods
     // 添加购物车操作
-    // 进行加入购物车操作前，判断token是否存在
+    // 进行加入购物车操作前，判断token是否存在（判断是本地操作还是接口操作）
     if (userStore.userInfo.token) {
       // 发送加入购物车请求
       await addCartApi({ skuId, count })
       // 获取购物车列表
-      const res = await getCartListApi()
-      cartList.value = res.data.result
-      setTimeout(() => {
-        console.log(res);
-      }, 3000)
+      await getCartList()
     } else {
       // 本地购物车逻辑
       // 判断是否添加过
@@ -38,12 +34,25 @@ export const useCartStore = defineStore("cart", () => {
     }
   }
 
-
-
   // 删除指定购物车商品
-  const removeCartItem = (skuId) => {
-    const index = cartList.value.findIndex(item => item.skuId === skuId)
-    cartList.value.splice(index, 1)
+  const removeCartItem = async (skuId) => {
+    // 判断token是否存在,接口操作（登录）
+    if (userStore.userInfo.token) {
+      // 发送删除购物车商品请求
+      await removeCartItemApi([skuId])
+      // 获取最新的购物车列表
+      await getCartList()
+    } else {
+      // 本地操作（未登录）
+      const index = cartList.value.findIndex(item => item.skuId === skuId)
+      cartList.value.splice(index, 1)
+    }
+  }
+
+  // 获取最新的购物车列表
+  const getCartList = async () => {
+    const res = await getCartListApi()
+    cartList.value = res.data.result
   }
 
   // 购物车商品选中状态

@@ -3,7 +3,7 @@ import axios from "axios";
 import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css'
 // 引入pinia数据
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/stores/userStore";
 import router from "@/router";
 
 const instance = axios.create({

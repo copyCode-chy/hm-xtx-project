@@ -13,6 +13,11 @@ const allCheck = (selected) => {
   // 调用pinia里的方法全选
   cartStore.allCheckedChange(selected)
 }
+
+// 删除购物车
+const delCart = (i) => {
+  cartStore.removeCartItem(i.skuId)
+};
 </script>
 
 <template>

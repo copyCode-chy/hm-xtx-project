@@ -18,3 +18,14 @@ export const getCartListApi = () => {
     url: '/member/cart'
   })
 }
+
+// 删除购物车商品接口
+export const removeCartItemApi = ([skuId]) => {
+  return request({
+    url: '/member/cart',
+    method: 'DELETE',
+    data: {
+      ids: [skuId]
+    }
+  })
+}

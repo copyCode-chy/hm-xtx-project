@@ -45,15 +45,17 @@ export const useCartStore = defineStore("cart", () => {
     })
   }
 
-  //全选框
-  const allChecked = computed(() => cartList.value.every(item => item.selected === true))
-
-  // 计算商品总数和价格
+  // 计算属性
   // 总数
   const totalCount = computed(() => cartList.value.reduce((total, item) => total + item.count, 0))
   // 总价
   const totalPrice = computed(() => cartList.value.reduce((total, item) => total + item.count * item.price, 0))
-
+  // 购物车选中的商品数量
+  const selTotal = computed(() => cartList.value.filter((item) => item.selected === true).reduce((total, item) => total + item.count, 0))
+  // 购物车选中的商品总价
+  const selPrice = computed(() => cartList.value.filter((item) => item.selected === true).reduce((total, item) => total + item.price * item.count, 0))
+  //全选框状态
+  const allChecked = computed(() => cartList.value.every(item => item.selected === true))
   return {
     cartList,
     addCart,
@@ -62,6 +64,8 @@ export const useCartStore = defineStore("cart", () => {
     totalPrice,
     singleChecked,
     allChecked,
-    allCheckedChange
+    allCheckedChange,
+    selTotal,
+    selPrice
   }
 }, { persist: true })

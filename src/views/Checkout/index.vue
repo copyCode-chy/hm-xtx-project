@@ -3,9 +3,11 @@ import { ref, onMounted } from 'vue'
 import { getCheckInfoApi } from '@/apis/checkout';
 
 const checkInfo = ref({})  // 订单对象
-const curAddress = ref({})  // 地址对象
+const curAddress = ref({})  // 显示地址数据
 // 切换地址弹框的显示隐藏
-const toggleFlag = ref(false)
+const isShow = ref(false)
+// 地址弹框当前选中的地址
+const activeAddress = ref({})
 
 // 发送生成订单接口
 const checkInfoApi = async () => {
@@ -14,8 +16,19 @@ const checkInfoApi = async () => {
   // 设置默认地址
   const item = checkInfo.value.userAddresses.find((item) => item.isDefault === 0)
   curAddress.value = item
-
   console.log(res);
+}
+
+// 点击地址时触发,获取当前激活的地址数据
+const switchAddress = (item) => {
+  activeAddress.value = item
+}
+// 点击确认按钮切换页面地址数据
+const confirm = () => {
+  // 将当前选中的地址数据赋值给当前显示的数据curAddress
+  curAddress.value = activeAddress.value
+  // 关闭dialog弹窗
+  isShow.value = false
 }
 
 onMounted(() => {
@@ -40,8 +53,8 @@ onMounted(() => {
               </ul>
             </div>
             <div class="action">
-              <el-button size="large" @click="toggleFlag = true">切换地址</el-button>
-              <el-button size="large" @click="addFlag = true">添加地址</el-button>
+              <el-button size="large" @click="isShow = true">切换地址</el-button>
+              <el-button size="large" @click="isShow = true">添加地址</el-button>
             </div>
           </div>
         </div>
@@ -121,9 +134,10 @@ onMounted(() => {
     </div>
   </div>
   <!-- 切换地址 -->
-  <el-dialog title="切换收货地址" width="30%" center v-model="toggleFlag">
+  <el-dialog title="切换收货地址" width="30%" center v-model="isShow">
     <div class="addressWrapper">
-      <div class="text item" v-for="item in checkInfo.userAddresses" :key="item.id">
+      <div class="text item" v-for="item in checkInfo.userAddresses" :key="item.id" @click="switchAddress(item)"
+        :class="{ active: activeAddress.id === item.id }">
         <ul>
           <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
           <li><span>联系方式：</span>{{ item.contact }}</li>
@@ -134,7 +148,7 @@ onMounted(() => {
     <template #footer>
       <span class="dialog-footer">
         <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </span>
     </template>
   </el-dialog>

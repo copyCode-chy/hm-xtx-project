@@ -1,9 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getCheckInfoApi } from '@/apis/checkout';
+import { getCheckInfoApi, createOrderApi } from '@/apis/checkout';
+import { useCartStore } from '@/stores/cartStore'
+import { useRouter } from 'vue-router';
 
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})  // 显示地址数据
+const router = useRouter()
+const cartStore = useCartStore()
+
 // 切换地址弹框的显示隐藏
 const isShow = ref(false)
 // 地址弹框当前选中的地址
@@ -16,7 +21,8 @@ const checkInfoApi = async () => {
   // 设置默认地址
   const item = checkInfo.value.userAddresses.find((item) => item.isDefault === 0)
   curAddress.value = item
-  console.log(res);
+  console.log(checkInfo.value);
+
 }
 
 // 点击地址时触发,获取当前激活的地址数据
@@ -29,6 +35,31 @@ const confirm = () => {
   curAddress.value = activeAddress.value
   // 关闭dialog弹窗
   isShow.value = false
+}
+
+// 提交订单
+const getCreateOrder = async () => {
+  const res = await createOrderApi({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: checkInfo.value.goods.map((item) => {
+      return {
+        skuId: item.skuId,
+        count: item.count
+      }
+    }),
+    addressId: curAddress.value.id
+  })
+  router.push({
+    path: '/pay',
+    query: {
+      id: res.data.result.id
+    }
+  })
+  // 获取最新购物车数据，更新购物车状态
+  cartStore.getCartList()
 }
 
 onMounted(() => {
@@ -83,7 +114,7 @@ onMounted(() => {
                   </a>
                 </td>
                 <td>&yen;{{ i.price }}</td>
-                <td>{{ i.price }}</td>
+                <td>{{ i.count }}</td>
                 <td>&yen;{{ i.totalPrice }}</td>
                 <td>&yen;{{ i.totalPayPrice }}</td>
               </tr>
@@ -128,7 +159,7 @@ onMounted(() => {
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button type="primary" size="large" @click="getCreateOrder">提交订单</el-button>
         </div>
       </div>
     </div>

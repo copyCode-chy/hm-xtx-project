@@ -4,7 +4,6 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css'
 // 引入pinia数据
 import { useUserStore } from "@/stores/userStore";
-import router from "@/router";
 
 const instance = axios.create({
   // 基地址

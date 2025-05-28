@@ -76,7 +76,7 @@ const delCart = (i) => {
               <td colspan="6">
                 <div class="cart-none">
                   <el-empty description="购物车列表为空">
-                    <el-button type="primary">随便逛逛</el-button>
+                    <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
                   </el-empty>
                 </div>
               </td>
@@ -92,7 +92,7 @@ const delCart = (i) => {
           <span class="red">¥ {{ cartStore.selPrice }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary">下单结算</el-button>
+          <el-button size="large" type="primary" @click="$router.push('/Checkout')">下单结算</el-button>
         </div>
       </div>
     </div>

@@ -2,15 +2,21 @@
 import { getOrderApi } from '@/apis/pay';
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
+import { useCountDown } from '@/composables/useCountDown';
 
 const route = useRoute()
 // 提交的订单数据
 const payInfo = ref({})
 
+// 结构倒计时函数里的参数
+const { countDown, timeData } = useCountDown()
+
 const getOrder = async () => {
   const res = await getOrderApi(route.query.id)
   payInfo.value = res.data.result
-  console.log(payInfo.value);
+
+  // 初始化倒计时秒数
+  countDown(payInfo.value.countdown)
 }
 
 // 支付地址
@@ -33,7 +39,7 @@ onMounted(() => {
         <span class="icon iconfont icon-queren2"></span>
         <div class="tip">
           <p>订单提交成功！请尽快完成支付。</p>
-          <p>支付还剩 <span>24分30秒</span>, 超时后将取消订单</p>
+          <p>支付还剩 <span> {{ timeData }}</span>, 超时后将取消订单</p>
         </div>
         <div class="amount">
           <span>应付总额：</span>

@@ -30,7 +30,8 @@ onMounted(() => {
         <p>支付方式：<span>支付宝</span></p>
         <p>支付金额：<span>￥{{ orderData.payMoney?.toFixed(2) }}</span></p>
         <div class="btn">
-          <el-button type="primary" style="margin-right:20px">查看订单</el-button>
+          <el-button type="primary" style="margin-right:20px"
+            @click="$router.push('/member/userorder')">查看订单</el-button>
           <el-button>进入首页</el-button>
         </div>
         <p class="alert">

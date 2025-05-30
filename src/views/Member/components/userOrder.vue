@@ -13,6 +13,7 @@ const tabTypes = [
   { name: "cancel", label: "已取消" }
 ]
 
+// 请求参数
 const params = ref({
   orderState: 0,
   page: 1,
@@ -21,10 +22,29 @@ const params = ref({
 
 // 订单列表
 const orderList = ref([])
+// 订单总数
+const total = ref()
 
+// 发送获取订单请求
 const getOrderList = async () => {
   const res = await getUserOrder(params.value)
   orderList.value = res.data.result.items
+  total.value = res.data.result.counts
+  console.log(res);
+}
+// tab切换时触发
+const tabChange = (index) => {
+  // 将orderState设置为当前选中的tabs
+  params.value.orderState = index
+  // 然后再次发送请求，更新数据
+  getOrderList()
+}
+// 切换页数时触发
+const pageChange = (index) => {
+  // 修改params的page参数为对应页数
+  params.value.page = index
+  // 再次发送请求更新页面
+  getOrderList()
 }
 
 onMounted(() => {
@@ -34,7 +54,7 @@ onMounted(() => {
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs @tab-change="tabChange">
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
@@ -111,7 +131,8 @@ onMounted(() => {
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination background layout="prev, pager, next" />
+            <el-pagination background layout="prev, pager, next" :total :page-size="params.pageSize"
+              @current-change="pageChange" />
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ const instance = axios.create({
   // 基地址
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
   // 超时时间
-  timeout: 5000
+  timeout: 15000
 })
 
 // 拦截器
@@ -44,7 +44,7 @@ instance.interceptors.response.use(function (response) {
 
   ElMessage({
     type: "warning",
-    message: error.response.data.message || '请求失败',
+    message: error?.response?.data?.message || '请求失败',
   })
   // 如果401token失效过期
   // 1.清除本地用户数据

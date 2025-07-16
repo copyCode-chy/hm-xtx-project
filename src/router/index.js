@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { ElMessage } from 'element-plus'
-import { useUserStore } from "@/stores/userStore";
 const Login = () => import('@/views/Login/index.vue')
 const Layout = () => import('@/views/Layout/index.vue')
 const Home = () => import('@/views/Home/index.vue')
@@ -14,6 +13,8 @@ const PayBack = () => import('@/views/Pay/PayBack.vue')
 const Member = () => import('@/views/Member/index.vue')
 const UserInfo = () => import('@/views/Member/components/userInfo.vue')
 const UserOrder = () => import('@/views/Member/components/userOrder.vue')
+const HelpCenter = () => import('@/views/HelpCenter/index.vue')
+const AboutUs = () => import('@/views/AboutUs/index.vue')
 
 
 const router = createRouter({
@@ -67,6 +68,14 @@ const router = createRouter({
               component: UserOrder
             }
           ]
+        },
+        {
+          path: "help",
+          component: HelpCenter
+        },
+        {
+          path: "about",
+          component: AboutUs
         }
       ]
     }, {
@@ -89,7 +98,7 @@ const router = createRouter({
 const logUrl = ['/Checkout', '/pay']
 
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore()
+
   // 如果访问的权限页
   if (logUrl.includes(to.path)) {
     // 如果访问权限页的同时存在token

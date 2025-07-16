@@ -1,5 +1,6 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore';
+import { onMounted } from 'vue'
 const cartStore = useCartStore();
 
 // 删除事件
@@ -8,8 +9,10 @@ const delCart = (skuId) => {
   cartStore.removeCartItem(skuId)
 }
 
-// 获取最新的购物车数据
-cartStore.getCartList()
+onMounted(() => {
+  // 获取最新的购物车数据
+  cartStore.getCartList()
+})
 </script>
 
 <template>

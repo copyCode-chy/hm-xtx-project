@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue'
 import { getCheckInfoApi, createOrderApi } from '@/apis/checkout';
 import { useCartStore } from '@/stores/cartStore'
+import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
 
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})  // 显示地址数据
 const router = useRouter()
 const cartStore = useCartStore()
+const userStore = useUserStore()
 
 // 切换地址弹框的显示隐藏
 const isShow = ref(false)

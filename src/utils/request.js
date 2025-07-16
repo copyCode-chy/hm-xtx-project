@@ -1,6 +1,5 @@
 // axios基础封装
 import axios from "axios";
-import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css'
 // 引入pinia数据
 import { useUserStore } from "@/stores/userStore";
@@ -42,10 +41,6 @@ instance.interceptors.response.use(function (response) {
   // 请求拦截器携带token
   const userStore = useUserStore()
 
-  ElMessage({
-    type: "warning",
-    message: error?.response?.data?.message || '请求失败',
-  })
   // 如果401token失效过期
   // 1.清除本地用户数据
   // 2.跳转到登录页

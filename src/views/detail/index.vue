@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import detailHot from "./components/detailHot.vue";
 import { useCartStore } from "@/stores/cartStore";
+import { debounce } from 'lodash'
 
 const goodsData = ref({});
 const route = useRoute();
@@ -47,10 +48,16 @@ const addCart = () => {
       attrsText: skuObj.specsText,
       selected: true
     })
+    ElMessage({
+      type: 'success',
+      message: '成功加入购物车'
+    })
   } else {
     ElMessage.warning("请选择商品规格");
   }
 }
+
+const handleAddToCart = debounce(addCart, 500)
 
 onMounted(() => {
   getGoodsData();
@@ -132,7 +139,7 @@ onMounted(() => {
               <el-input-number v-model="count" :min="1" @change="countChange(count)" />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn" @click="addCart">
+                <el-button size="large" class="btn" @click="handleAddToCart">
                   加入购物车
                 </el-button>
               </div>

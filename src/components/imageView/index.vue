@@ -57,11 +57,11 @@ watch([elementX, elementY], () => {
   bigLeft.value = -left.value * 2
   bigTop.value = -top.value * 2
 })
+
 </script>
 
 
 <template>
-  {{ left }} {{ top }}
   <div class="goods-image">
     <!-- 左侧大图-->
     <div class="middle" ref="target">

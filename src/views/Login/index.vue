@@ -3,6 +3,7 @@ import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
+import { debounce } from 'lodash'
 
 // 创建表单对象
 const from = ref({
@@ -67,6 +68,8 @@ const submitForm = () => {
   })
 }
 
+const handleSub = debounce(submitForm, 500)
+
 </script>
 
 
@@ -105,7 +108,7 @@ const submitForm = () => {
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn" @click="submitForm()">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="handleSub()">点击登录</el-button>
             </el-form>
           </div>
         </div>
